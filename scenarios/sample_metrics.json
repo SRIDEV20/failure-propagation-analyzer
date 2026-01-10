@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "latency_ms": 1500,
+    "error_rate": 0.02,
+    "timeout": false
+  },
+  "payment-service": {
+    "latency_ms": 300,
+    "error_rate": 0.35,
+    "timeout": false
+  },
+  "inventory-service": {
+    "latency_ms": null,
+    "error_rate": null,
+    "timeout": true
+  }
+}

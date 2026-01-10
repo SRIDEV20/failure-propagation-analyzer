@@ -1,0 +1,18 @@
+{
+  "api-gateway": ["auth"],
+  "auth": ["user-db"],
+  "user-service": ["user-db"],
+  "order-service": ["auth", "inventory-service", "payment-service"],
+  "inventory-service": ["inventory-db"],
+  "payment-service": ["external-payment-gateway"],
+  "notification-service": ["order-service", "payment-service"],
+  "audit-service": [
+    "api-gateway",
+    "auth",
+    "order-service",
+    "payment-service"
+  ],
+  "user-db": [],
+  "inventory-db": [],
+  "external-payment-gateway": []
+}
