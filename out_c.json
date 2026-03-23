@@ -1,1 +1,0 @@
-{"severity": "MEDIUM", "confidence_score": 75, "primary_failures": ["svc-b", "svc-a", "svc-c"], "secondary_failures": []}

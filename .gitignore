@@ -1,19 +1,19 @@
-# Python
-.venv/
-__pycache__/
-*.pyc
+# Secrets
+alert_key.json
 
-# Env files
+# temp/test files
+out*.json
+ingest_*.json
+payload.json
+scheduled.json
+
+# env
 .env
 .env.*
 
-# AWS CDK
+# python
+.venv/
+__pycache__/
+
+# cdk
 cdk.out/
-
-# Logs / temp
-*.log
-*.json
-
-# OS
-.DS_Store
-Thumbs.db
