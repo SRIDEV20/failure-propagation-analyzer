@@ -1,4 +1,19 @@
+# Python
+.venv/
 __pycache__/
+*.pyc
+
+# Env files
 .env
-venv/
+.env.*
+
+# AWS CDK
+cdk.out/
+
+# Logs / temp
 *.log
+*.json
+
+# OS
+.DS_Store
+Thumbs.db

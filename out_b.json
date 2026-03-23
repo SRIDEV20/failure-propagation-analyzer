@@ -1,0 +1,1 @@
+{"severity": "LOW", "confidence_score": 40, "primary_failures": ["svc-a", "svc-b"], "secondary_failures": []}

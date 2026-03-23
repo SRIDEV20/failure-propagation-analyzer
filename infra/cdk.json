@@ -1,0 +1,12 @@
+{
+  "app": "python app.py",
+  "context": {
+    "projectName": "failure-propagation-analyzer",
+    "scheduleMinutes": 5,
+
+    "useExistingResources": false,
+    "existingSnsTopicArn": "",
+    "existingStateTableName": "service_state",
+    "existingGraphTableName": "service_dependency_graph"
+  }
+}
