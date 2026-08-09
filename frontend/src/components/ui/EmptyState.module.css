@@ -1,0 +1,18 @@
+.empty {
+  padding: 28px;
+  text-align: center;
+  border: 1px dashed rgba(148, 163, 184, 0.22);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  background: rgba(8, 16, 29, 0.5);
+}
+
+.title {
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.description {
+  line-height: 1.6;
+}

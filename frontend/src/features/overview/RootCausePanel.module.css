@@ -1,0 +1,31 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(9, 17, 30, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.description,
+.details {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}

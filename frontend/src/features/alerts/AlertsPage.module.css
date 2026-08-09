@@ -1,0 +1,55 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  padding: 20px;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.head,
+.row {
+  display: grid;
+  grid-template-columns: 120px minmax(240px, 1.5fr) 1fr 1.1fr 180px 120px;
+  gap: 12px;
+  align-items: center;
+}
+
+.head {
+  padding: 12px 14px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+}
+
+.row {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(8, 16, 29, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.alertTitle {
+  font-weight: 700;
+}
+
+.alertSummary {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1200px) {
+  .head,
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

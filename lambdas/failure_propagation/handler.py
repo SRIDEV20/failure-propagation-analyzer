@@ -16,9 +16,31 @@ sns = boto3.client("sns", region_name="ap-south-1")
 SNS_TOPIC_ARN = os.getenv("SNS_TOPIC_ARN")
 STATE_TABLE_NAME = os.getenv("STATE_TABLE_NAME", "service_state")
 GRAPH_TABLE_NAME = os.getenv("GRAPH_TABLE_NAME", "service_dependency_graph")
+TABLE_ALIAS_CANDIDATES = {
+    "state": [STATE_TABLE_NAME, "service_state", "service_state_cdk"],
+    "graph": [GRAPH_TABLE_NAME, "service_dependency_graph", "service_dependency_graph_cdk"],
+}
 
-state_table = dynamodb.Table(STATE_TABLE_NAME)
-graph_table = dynamodb.Table(GRAPH_TABLE_NAME)
+
+def resolve_table(table_names: list[str]):
+    candidates = [name for name in dict.fromkeys(name for name in table_names if name)]
+    if not candidates:
+        raise ValueError("No DynamoDB table names were provided")
+
+    for table_name in candidates:
+        table = dynamodb.Table(table_name)
+
+        try:
+            if table.scan(Limit=1).get("Items"):
+                return table
+        except Exception:
+            continue
+
+    return dynamodb.Table(candidates[0])
+
+
+state_table = resolve_table(TABLE_ALIAS_CANDIDATES["state"])
+graph_table = resolve_table(TABLE_ALIAS_CANDIDATES["graph"])
 
 
 def log(event_type: str, payload: dict):
@@ -130,6 +152,24 @@ Service Impact Paths:
     return True
 
 
+def persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths):
+    updated_at = int(time.time())
+    for service in sorted(final_health.keys()):
+        state_table.put_item(
+            Item={
+                "service_name": service,
+                "local_state": initial_health.get(service, "UNKNOWN"),
+                "final_state": final_health.get(service, "UNKNOWN"),
+                "root_failure": service in roots,
+                "severity": compute_severity(final_health) if service in roots or final_health.get(service) in ("DEGRADED", "FAILED") else "LOW",
+                "impact_score": impact_scores.get(service, 0),
+                "critical_path": critical_paths.get(service, []),
+                "dependency_count": len(graph.get(service, [])),
+                "last_updated": updated_at,
+            }
+        )
+
+
 def lambda_handler(event, context):
     log("lambda_start", {"event": event or {}})
 
@@ -152,6 +192,8 @@ def lambda_handler(event, context):
     ranked = rank_services_by_impact(impact_scores)
 
     severity = compute_severity(final_health)
+
+    persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths)
 
     log("analysis", {
         "severity": severity,

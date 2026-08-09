@@ -1,0 +1,81 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.8fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.heading {
+  font-size: clamp(2rem, 4vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+  margin: 14px 0 14px;
+}
+
+.lead {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.summaryCard,
+.errorCard {
+  padding: 22px;
+}
+
+.summaryTitle {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+}
+
+.summaryValue {
+  margin-top: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.summaryNote {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.errorCard {
+  border-color: rgba(255, 92, 124, 0.22);
+  color: #fecdd3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.wideCard {
+  grid-column: span 12;
+  padding: 20px;
+}
+
+.sideCard {
+  grid-column: span 6;
+  padding: 20px;
+}
+
+@media (max-width: 1180px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .sideCard {
+    grid-column: span 12;
+  }
+}

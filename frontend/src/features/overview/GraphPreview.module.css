@@ -1,0 +1,12 @@
+.preview {
+  height: 420px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.flow {
+  background:
+    radial-gradient(circle at top left, rgba(79, 140, 255, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(7, 15, 28, 0.96), rgba(7, 15, 28, 0.9));
+}

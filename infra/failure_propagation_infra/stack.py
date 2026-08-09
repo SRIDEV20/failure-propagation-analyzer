@@ -66,7 +66,9 @@ class FailurePropagationStack(Stack):
                     name="service_name", type=dynamodb.AttributeType.STRING
                 ),
                 billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
-                point_in_time_recovery=True,
+                point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
+                    enabled=True
+                ),
             )
 
             graph_table = dynamodb.Table(
@@ -77,7 +79,9 @@ class FailurePropagationStack(Stack):
                     name="service_name", type=dynamodb.AttributeType.STRING
                 ),
                 billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
-                point_in_time_recovery=True,
+                point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
+                    enabled=True
+                ),
             )
             state_table_name = state_table.table_name
             graph_table_name = graph_table.table_name
@@ -112,9 +116,12 @@ class FailurePropagationStack(Stack):
             code=_lambda.Code.from_asset(
                 "..",
                 exclude=[
+                    "cdk.out/**",
                     "infra/cdk.out/**",
                     "infra/.venv/**",
                     ".venv/**",
+                    "**/cdk.out/**",
+                    "**/.venv/**",
                     "**/__pycache__/**",
                     "**/.pytest_cache/**",
                     ".git/**",

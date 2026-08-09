@@ -1,0 +1,133 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(320px, 0.9fr);
+  gap: 20px;
+}
+
+.graphCard,
+.sidebarCard {
+  padding: 20px;
+}
+
+.flowWrap {
+  height: calc(100vh - 200px);
+  min-height: 700px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.flow {
+  background:
+    radial-gradient(circle at top left, rgba(79, 140, 255, 0.1), transparent 35%),
+    linear-gradient(180deg, rgba(6, 15, 28, 0.98), rgba(6, 15, 28, 0.92));
+}
+
+.sideRail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.detailsHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.serviceName {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.detailLine {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metricLabel,
+.sectionLabel {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.metricValue {
+  margin-top: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.section {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(8, 16, 29, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.flowText {
+  margin-top: 8px;
+  color: var(--muted-strong);
+  line-height: 1.55;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(8, 16, 29, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.dotHealthy,
+.dotDegraded,
+.dotFailed {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.dotHealthy {
+  background: var(--success);
+}
+
+.dotDegraded {
+  background: var(--warning);
+}
+
+.dotFailed {
+  background: var(--danger);
+}
+
+@media (max-width: 1280px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .flowWrap {
+    height: 640px;
+    min-height: 640px;
+  }
+}

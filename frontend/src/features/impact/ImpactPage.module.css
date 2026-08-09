@@ -1,0 +1,60 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.chartCard {
+  grid-column: span 6;
+  padding: 20px;
+}
+
+.chartBox {
+  height: 340px;
+}
+
+.chartBoxSmall {
+  height: 340px;
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(8, 16, 29, 0.58);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.statTitle {
+  font-weight: 700;
+}
+
+.statMeta {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.statValue {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 1200px) {
+  .chartCard {
+    grid-column: span 12;
+  }
+}

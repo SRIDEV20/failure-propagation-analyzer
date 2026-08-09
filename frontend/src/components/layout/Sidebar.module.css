@@ -1,0 +1,110 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 20px 18px;
+  background: linear-gradient(180deg, rgba(6, 14, 27, 0.96), rgba(8, 17, 31, 0.9));
+  border-right: 1px solid var(--border);
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.brandBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: rgba(15, 27, 46, 0.8);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.logoMark {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.22), rgba(57, 217, 138, 0.16));
+  color: var(--text);
+  border: 1px solid rgba(79, 140, 255, 0.26);
+}
+
+.brandTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.brandSubtitle {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 4px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link {
+  padding: 12px 14px;
+  border-radius: 14px;
+  color: var(--muted-strong);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.link:hover {
+  transform: translateX(2px);
+  background: rgba(79, 140, 255, 0.08);
+  border-color: rgba(79, 140, 255, 0.12);
+}
+
+.active {
+  color: var(--text);
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.16), rgba(17, 33, 57, 0.9));
+  border-color: rgba(79, 140, 255, 0.22);
+}
+
+.footerCard {
+  margin-top: auto;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(17, 32, 57, 0.88), rgba(10, 20, 35, 0.92));
+  border: 1px solid var(--border);
+}
+
+.footerLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.footerValue {
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.footerNote {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 1080px) {
+  .sidebar {
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}

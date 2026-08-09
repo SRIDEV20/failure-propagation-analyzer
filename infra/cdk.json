@@ -3,9 +3,8 @@
   "context": {
     "projectName": "failure-propagation-analyzer",
     "scheduleMinutes": 5,
-
-    "useExistingResources": false,
-    "existingSnsTopicArn": "",
+    "useExistingResources": true,
+    "existingSnsTopicArn": "arn:aws:sns:ap-south-1:152322629294:sns-debug-test",
     "existingStateTableName": "service_state",
     "existingGraphTableName": "service_dependency_graph"
   }

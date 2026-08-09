@@ -1,0 +1,49 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(9, 17, 30, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.meta {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.score {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.25rem;
+  color: #dbeafe;
+}
+
+.barTrack {
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 14px;
+  background: rgba(148, 163, 184, 0.12);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(79, 140, 255, 0.9), rgba(57, 217, 138, 0.8));
+}

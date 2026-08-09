@@ -1,0 +1,99 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  padding: 20px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.select {
+  min-width: 220px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(8, 17, 30, 0.78);
+  color: var(--text);
+  padding: 12px 14px;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.head,
+.row {
+  display: grid;
+  grid-template-columns: 160px 140px 100px minmax(240px, 1.3fr) minmax(220px, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.head {
+  padding: 12px 14px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+}
+
+.row {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(8, 16, 29, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.level {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+}
+
+.error {
+  color: #ff99ac;
+}
+
+.warn {
+  color: #f8c36e;
+}
+
+.info {
+  color: #8edaff;
+}
+
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+}
+
+.pagination button {
+  border: 1px solid rgba(79, 140, 255, 0.24);
+  background: rgba(14, 26, 44, 0.84);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1200px) {
+  .head,
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
