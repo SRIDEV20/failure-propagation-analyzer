@@ -19,6 +19,8 @@ export interface ServiceSnapshot {
   rootCause: boolean;
   severity: AlertSeverity;
   confidence: number;
+  baseImpactScore: number;
+  operationalImpactScore: number;
   impactScore: number;
   blastRadius: number;
   propagated: boolean;
@@ -47,6 +49,8 @@ export interface LogRecord {
 
 export interface ImpactRecord {
   service: string;
+  baseImpactScore: number;
+  operationalImpactScore: number;
   impactScore: number;
   blastRadius: number;
   severity: AlertSeverity;

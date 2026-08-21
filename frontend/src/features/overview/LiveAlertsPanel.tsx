@@ -2,6 +2,7 @@ import { Badge } from '../../components/ui/Badge';
 import { EmptyState } from '../../components/ui/EmptyState';
 import type { AlertRecord } from '../../types/domain';
 import styles from './LiveAlertsPanel.module.css';
+import { formatTimestamp } from '../../utils/formatters';
 
 export function LiveAlertsPanel({ alerts }: { alerts: AlertRecord[] }) {
   if (alerts.length === 0) {
@@ -20,7 +21,7 @@ export function LiveAlertsPanel({ alerts }: { alerts: AlertRecord[] }) {
           </div>
           <div className={styles.meta}>{alert.summary}</div>
           <div className={styles.footer}>
-            <span>{alert.timestamp}</span>
+            <span>{formatTimestamp(alert.timestamp)}</span>
             <span>{alert.affectedServices.join(' • ')}</span>
           </div>
         </div>

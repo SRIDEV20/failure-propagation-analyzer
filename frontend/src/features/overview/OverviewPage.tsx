@@ -10,6 +10,7 @@ import { LiveAlertsPanel } from './LiveAlertsPanel';
 import { RecentEvents } from './RecentEvents';
 import { RootCausePanel } from './RootCausePanel';
 import styles from './OverviewPage.module.css';
+import { formatTime } from '../../utils/formatters';
 
 export function OverviewPage() {
   const { data, loading, error } = useDashboard();
@@ -31,9 +32,15 @@ export function OverviewPage() {
         <Card className={styles.summaryCard}>
           <div className={styles.summaryTitle}>Current focus</div>
           <div className={styles.summaryValue}>
-            {data.summary.failed > 0 ? 'Active failure propagation detected' : 'All monitored services are stable'}
+            {data.summary.criticalAlerts > 0
+              ? `${data.summary.criticalAlerts} critical alert${data.summary.criticalAlerts === 1 ? '' : 's'} active`
+              : data.summary.failed > 0
+                ? `${data.summary.failed} service${data.summary.failed === 1 ? '' : 's'} failed`
+                : data.summary.degraded > 0
+                  ? `${data.summary.degraded} service${data.summary.degraded === 1 ? '' : 's'} degraded`
+                  : 'All monitored services are stable'}
           </div>
-          <div className={styles.summaryNote}>Last sync {new Date(data.lastSyncedAt).toLocaleTimeString()}</div>
+          <div className={styles.summaryNote}>Last sync {formatTime(data.lastSyncedAt)}</div>
         </Card>
       </section>
 

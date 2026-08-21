@@ -112,8 +112,8 @@ export function GraphPage() {
 
               <div className={styles.metricsGrid}>
                 <div>
-                  <div className={styles.metricLabel}>Impact score</div>
-                  <div className={styles.metricValue}>{selectedService.impactScore}</div>
+                  <div className={styles.metricLabel}>Operational impact score</div>
+                  <div className={styles.metricValue}>{selectedService.operationalImpactScore ?? selectedService.impactScore}</div>
                 </div>
                 <div>
                   <div className={styles.metricLabel}>Confidence</div>

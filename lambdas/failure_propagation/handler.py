@@ -51,13 +51,25 @@ def log(event_type: str, payload: dict):
     }))
 
 
-def compute_severity(final_health: dict) -> str:
+def compute_system_severity(final_health: dict) -> str:
     affected = sum(1 for s in final_health.values() if s in ("DEGRADED", "FAILED"))
     failed = sum(1 for s in final_health.values() if s == "FAILED")
 
     if failed >= 2 or affected >= 3:
         return "CRITICAL"
     return "LOW"
+
+
+def service_severity_for_state(service_state: str, is_root_failure: bool) -> str:
+    if is_root_failure or service_state == "FAILED":
+        return "CRITICAL"
+    if service_state == "DEGRADED":
+        return "WARNING"
+    return "INFO"
+
+
+def compute_severity(final_health: dict) -> str:
+    return compute_system_severity(final_health)
 
 
 # 🔥 Fallback graph (if DynamoDB empty)
@@ -155,14 +167,19 @@ Service Impact Paths:
 def persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths):
     updated_at = int(time.time())
     for service in sorted(final_health.keys()):
+        service_state = final_health.get(service, "UNKNOWN")
+        is_root_failure = service in roots
+        severity = service_severity_for_state(service_state, is_root_failure)
+
         state_table.put_item(
             Item={
                 "service_name": service,
                 "local_state": initial_health.get(service, "UNKNOWN"),
-                "final_state": final_health.get(service, "UNKNOWN"),
-                "root_failure": service in roots,
-                "severity": compute_severity(final_health) if service in roots or final_health.get(service) in ("DEGRADED", "FAILED") else "LOW",
+                "final_state": service_state,
+                "root_failure": is_root_failure,
+                "severity": severity,
                 "impact_score": impact_scores.get(service, 0),
+                "base_impact_score": impact_scores.get(service, 0),
                 "critical_path": critical_paths.get(service, []),
                 "dependency_count": len(graph.get(service, [])),
                 "last_updated": updated_at,

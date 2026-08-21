@@ -6,6 +6,7 @@ import { SectionHeader } from '../../components/ui/SectionHeader';
 import { Tabs } from '../../components/ui/Tabs';
 import { useDashboard } from '../../context/DashboardContext';
 import styles from './LogsPage.module.css';
+import { formatTimestamp } from '../../utils/formatters';
 
 const levelOptions = [
   { value: 'all', label: 'All' },
@@ -71,7 +72,7 @@ export function LogsPage() {
           ) : (
             visibleLogs.map((log) => (
               <div key={log.id} className={styles.row}>
-                <div>{log.timestamp}</div>
+                <div>{formatTimestamp(log.timestamp)}</div>
                 <div>{log.service}</div>
                 <div className={`${styles.level} ${styles[log.level.toLowerCase()]}`}>{log.level}</div>
                 <div>{log.message}</div>

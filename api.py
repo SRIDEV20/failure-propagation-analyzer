@@ -10,6 +10,7 @@ from botocore.exceptions import BotoCoreError, ClientError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from mangum import Mangum
 
 from engine.analysis import find_root_causes
 from engine.impact import SERVICE_WEIGHTS
@@ -324,9 +325,12 @@ def build_impact_rows(services: List[dict], logs: List[dict]) -> List[dict]:
 
     impact_rows: List[dict] = []
     for service in services:
+        base_impact_score = SERVICE_WEIGHTS.get(service["name"], 1)
         impact_rows.append(
             {
                 "service": service["name"],
+                "baseImpactScore": base_impact_score,
+                "operationalImpactScore": service["impactScore"],
                 "impactScore": service["impactScore"],
                 "blastRadius": service["blastRadius"],
                 "severity": service["severity"],
@@ -336,7 +340,7 @@ def build_impact_rows(services: List[dict], logs: List[dict]) -> List[dict]:
             }
         )
 
-    return sorted(impact_rows, key=lambda item: item["impactScore"], reverse=True)
+    return sorted(impact_rows, key=lambda item: item["operationalImpactScore"], reverse=True)
 
 
 def build_graph_view(
@@ -423,7 +427,8 @@ def build_dashboard_snapshot() -> dict:
             blast_radius = count_blast_radius(service, dependent_graph)
             root_cause = service in root_failures
             severity = severity_for_service(final, root_cause)
-            impact_score = (SERVICE_WEIGHTS.get(service, 1) * max(1, blast_radius + 1)) + (6 if final == "FAILED" else 3 if final == "DEGRADED" else 0)
+            base_impact_score = SERVICE_WEIGHTS.get(service, 1)
+            operational_impact_score = (base_impact_score * max(1, blast_radius + 1)) + (6 if final == "FAILED" else 3 if final == "DEGRADED" else 0)
 
             service_rows.append(
                 {
@@ -436,7 +441,9 @@ def build_dashboard_snapshot() -> dict:
                     "rootCause": root_cause,
                     "severity": severity,
                     "confidence": confidence_score(dependencies, root_cause, propagated, final),
-                    "impactScore": impact_score,
+                    "baseImpactScore": base_impact_score,
+                    "operationalImpactScore": operational_impact_score,
+                    "impactScore": operational_impact_score,
                     "blastRadius": blast_radius,
                     "propagated": propagated,
                 }
@@ -582,3 +589,6 @@ def get_logs():
 def get_impact():
     snapshot = build_dashboard_snapshot()
     return {"impact": snapshot["impact"]}
+
+
+handler = Mangum(app)

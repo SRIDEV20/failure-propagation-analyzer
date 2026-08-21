@@ -45,11 +45,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       const liveState = await fetchLiveSystemState();
       if (liveState?.error) {
         setError(liveState.error);
+        setData((current) => ({ ...current, connectionState: 'offline' }));
+      } else if (liveState) {
+        setData(liveState);
       }
-      setData(liveState ?? createEmptyDashboardSnapshot());
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : 'Failed to load dashboard');
-      setData(createEmptyDashboardSnapshot());
+      setData((current) => ({ ...current, connectionState: 'offline' }));
     } finally {
       setLoading(false);
     }

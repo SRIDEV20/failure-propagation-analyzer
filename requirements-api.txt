@@ -1,0 +1,4 @@
+fastapi
+mangum
+boto3
+pydantic

@@ -6,6 +6,7 @@ import { SectionHeader } from '../../components/ui/SectionHeader';
 import { Tabs } from '../../components/ui/Tabs';
 import { useDashboard } from '../../context/DashboardContext';
 import styles from './AlertsPage.module.css';
+import { formatTimestamp } from '../../utils/formatters';
 
 const severityOptions = [
   { value: 'all', label: 'All' },
@@ -55,7 +56,7 @@ export function AlertsPage() {
                 </div>
                 <div>{alert.rootCause}</div>
                 <div>{alert.affectedServices.join(', ')}</div>
-                <div>{alert.timestamp}</div>
+                <div>{formatTimestamp(alert.timestamp)}</div>
                 <div>
                   <Badge tone={alert.status === 'active' ? 'danger' : 'success'}>{alert.status}</Badge>
                 </div>
