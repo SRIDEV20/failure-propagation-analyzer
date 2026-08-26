@@ -166,8 +166,9 @@ def publish_alert(severity, roots, final_health, critical_paths):
 
     # 🔥 Clean critical path formatting
     path_lines = []
-    for root, path in critical_paths.items():
-        path_lines.append(" → ".join(path))
+    for root, branches in critical_paths.items():
+        for branch in branches:
+            path_lines.append(" → ".join(branch))
 
     formatted_message = f"""
 🚨 Failure Propagation Alert

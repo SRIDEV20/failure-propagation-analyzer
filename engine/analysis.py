@@ -27,21 +27,27 @@ def find_root_causes(dependency_graph: dict, final_health: dict) -> list:
     return roots
 def find_critical_paths(dependency_graph: dict, root_causes: list) -> dict:
     """
-    For each root cause, find the longest downstream path.
+    For each root cause, find every downstream path tied for the longest
+    length (not just one arbitrarily-picked branch). When a service has
+    multiple dependents, the graph forks into separate branches -- all
+    branches tied for the maximum depth are returned, so no equally-affected
+    branch is silently dropped. Iteration is sorted for deterministic output
+    regardless of the source dictionary's ordering (e.g. a DynamoDB scan).
     """
 
     def dfs(service, path, visited):
-        visited.add(service)
-        longest = path.copy()
+        next_visited = visited | {service}
+        branch_paths = []
 
-        for downstream, upstreams in dependency_graph.items():
-            if service in upstreams and downstream not in visited:
-                candidate = dfs(downstream, path + [downstream], visited)
-                if len(candidate) > len(longest):
-                    longest = candidate
+        for downstream, upstreams in sorted(dependency_graph.items()):
+            if service in upstreams and downstream not in next_visited:
+                branch_paths.extend(dfs(downstream, path + [downstream], next_visited))
 
-        visited.remove(service)
-        return longest
+        if not branch_paths:
+            return [path]
+
+        max_len = max(len(p) for p in branch_paths)
+        return [p for p in branch_paths if len(p) == max_len]
 
     critical_paths = {}
 

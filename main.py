@@ -50,8 +50,9 @@ def main():
 
     print("\nCritical Failure Paths")
     print("-" * 30)
-    for root, path in critical_paths.items():
-        print(f"{root}: {' -> '.join(path)}")
+    for root, branches in critical_paths.items():
+        for branch in branches:
+            print(f"{root}: {' -> '.join(branch)}")
 
     print("\nImpact Ranking (Most Dangerous First)")
     print("-" * 40)
