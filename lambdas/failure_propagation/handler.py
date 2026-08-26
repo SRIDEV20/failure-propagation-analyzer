@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from decimal import Decimal
 
 import boto3
 
@@ -43,12 +44,20 @@ state_table = resolve_table(TABLE_ALIAS_CANDIDATES["state"])
 graph_table = resolve_table(TABLE_ALIAS_CANDIDATES["graph"])
 
 
+def _json_default(value):
+    # Metrics read back from DynamoDB (or normalized for it) are Decimal,
+    # which json.dumps can't serialize on its own.
+    if isinstance(value, Decimal):
+        return float(value)
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
 def log(event_type: str, payload: dict):
     print(json.dumps({
         "event_type": event_type,
         "timestamp": int(time.time()),
         **payload,
-    }))
+    }, default=_json_default))
 
 
 def compute_system_severity(final_health: dict) -> str:
@@ -124,7 +133,11 @@ def generate_metrics(services, event):
     incoming_metrics = event.get("metrics")
 
     if incoming_service and incoming_metrics is not None:
-        metrics[incoming_service] = incoming_metrics
+        # boto3's DynamoDB resource rejects float; normalize any float fields
+        # (e.g. error_rate) to Decimal before they can reach put_item.
+        metrics[incoming_service] = json.loads(
+            json.dumps(incoming_metrics), parse_float=Decimal
+        )
         log("metrics_ingested", {"service": incoming_service, "metrics": incoming_metrics})
     else:
         log("scheduled_run_using_last_known_metrics", {})
