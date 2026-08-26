@@ -23,6 +23,16 @@ def propagate_failures(dependency_graph: dict, initial_health: dict) -> dict:
         for service, state in initial_health.items()
     }
 
+    # Track which services were GENUINELY failed locally (not just failed
+    # because of propagation). Only these get to propagate FAILED to their
+    # direct dependents. Anything beyond that first hop dampens to DEGRADED,
+    # so a single outage can't cascade as a hard FAILED across the whole
+    # graph (false amplification).
+    locally_failed = {
+        service for service, state in final_health.items()
+        if state == HealthState.FAILED
+    }
+
     queue = deque(final_health.keys())
 
     while queue:
@@ -39,8 +49,8 @@ def propagate_failures(dependency_graph: dict, initial_health: dict) -> dict:
 
             current_state = final_health[downstream]
 
-            if service_state == HealthState.FAILED:
-                propagated_state = HealthState.DEGRADED
+            if service in locally_failed:
+                propagated_state = HealthState.FAILED
             else:
                 propagated_state = HealthState.DEGRADED
 

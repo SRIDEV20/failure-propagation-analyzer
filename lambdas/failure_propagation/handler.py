@@ -98,15 +98,37 @@ def resolve_services(graph):
     return list(names)
 
 
-# 🔥 Force failure (for demo)
-def generate_metrics(services):
-    metrics = {}
-    for s in services:
-        metrics[s] = {
-            "latency_ms": 3000,
-            "error_rate": 0.9,
-            "timeout": False
-        }
+def get_last_known_metrics(services):
+    """
+    Scheduled-analysis mode: re-use each service's most recently stored
+    metrics from DynamoDB instead of fabricating new ones. A service with
+    no prior state defaults to an empty metrics dict, which evaluate_health
+    treats as HEALTHY.
+    """
+    items = state_table.scan().get("Items", [])
+    stored_metrics = {item["service_name"]: item.get("metrics", {}) for item in items}
+    return {s: stored_metrics.get(s, {}) for s in services}
+
+
+def generate_metrics(services, event):
+    """
+    Real-time ingestion mode: if the triggering event carries a specific
+    service_name + metrics payload (see README's manual test payload),
+    apply that single update on top of everyone else's last-known metrics.
+    Otherwise (e.g. the periodic EventBridge trigger), fall back to
+    scheduled-analysis mode and just re-evaluate from last-known metrics.
+    """
+    metrics = get_last_known_metrics(services)
+
+    incoming_service = event.get("service_name")
+    incoming_metrics = event.get("metrics")
+
+    if incoming_service and incoming_metrics is not None:
+        metrics[incoming_service] = incoming_metrics
+        log("metrics_ingested", {"service": incoming_service, "metrics": incoming_metrics})
+    else:
+        log("scheduled_run_using_last_known_metrics", {})
+
     return metrics
 
 
@@ -164,7 +186,7 @@ Service Impact Paths:
     return True
 
 
-def persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths):
+def persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths, metrics):
     updated_at = int(time.time())
     for service in sorted(final_health.keys()):
         service_state = final_health.get(service, "UNKNOWN")
@@ -174,6 +196,7 @@ def persist_service_state(graph, initial_health, final_health, roots, impact_sco
         state_table.put_item(
             Item={
                 "service_name": service,
+                "metrics": metrics.get(service, {}),
                 "local_state": initial_health.get(service, "UNKNOWN"),
                 "final_state": service_state,
                 "root_failure": is_root_failure,
@@ -193,7 +216,7 @@ def lambda_handler(event, context):
     graph = get_dependency_graph()
     services = resolve_services(graph)
 
-    metrics = generate_metrics(services)
+    metrics = generate_metrics(services, event or {})
     log("metrics_generated", metrics)
 
     initial_health = {
@@ -210,7 +233,7 @@ def lambda_handler(event, context):
 
     severity = compute_severity(final_health)
 
-    persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths)
+    persist_service_state(graph, initial_health, final_health, roots, impact_scores, critical_paths, metrics)
 
     log("analysis", {
         "severity": severity,
