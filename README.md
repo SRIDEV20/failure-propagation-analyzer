@@ -1,5 +1,7 @@
 # failure-propagation-analyzer
 
+**Live demo:** [failure-propagation-analyzer-five.vercel.app](https://failure-propagation-analyzer-five.vercel.app)
+
 Event-driven system for detecting cascading failures and identifying root causes in distributed architectures
 
 An AWS system for detecting service failures, propagating their impact across dependencies, identifying root causes, and generating severity-based alerts with confidence scoring.
@@ -160,7 +162,7 @@ A React + TypeScript dashboard (Vite, `frontend/`) that visualizes the live syst
 
 The whole frontend is driven by a single shared data source: `DashboardContext` polls the API's `/state` endpoint every 15 seconds and distributes the result to every page via React Context — one network call powers the entire dashboard rather than each page fetching independently.
 
-Currently runs locally (`npm run dev`); not yet deployed to a public host.
+Deployed to Vercel at [failure-propagation-analyzer-five.vercel.app](https://failure-propagation-analyzer-five.vercel.app), connected to the live API Gateway backend. Can also be run locally with `npm run dev`.
 
 ---
 
