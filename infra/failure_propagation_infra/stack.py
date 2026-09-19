@@ -243,6 +243,11 @@ class FailurePropagationStack(Stack):
             environment={
                 "STATE_TABLE_NAME": state_table_name,
                 "GRAPH_TABLE_NAME": graph_table_name,
+                "CORS_ALLOWED_ORIGINS": (
+                    "http://localhost:5173,http://127.0.0.1:5173,"
+                    "http://localhost:4173,http://127.0.0.1:4173,"
+                    "https://failure-propagation-analyzer-five.vercel.app"
+                ),
             },
         )
 
